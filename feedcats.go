@@ -7,11 +7,11 @@ import (
 	"time"
 )
 
-const NUM_OF_CATS int = 50
+const NUM_OF_CATS int = 99
 const NUM_OF_DISHES int = 3
 const DISHWASHING_TIME int = 2
 const MIN_CAT_EATING_TIME int = 1
-const MAX_CAT_EATING_TIME int = 3
+const MAX_CAT_EATING_TIME int = 10
 
 func main() {
 	var feedingTimes [NUM_OF_CATS]int
@@ -22,7 +22,7 @@ func main() {
 	}
 	// fmt.Println("Total Feeding Time In Seconds: " + strconv.Itoa(calcFeedingTime(feedingTimes)))
 	sortedCats := sortCatsDesc(feedingTimes)
-	FeedCats(sortedCats)
+	FeedCats2(sortedCats)
 }
 
 type cat struct {
