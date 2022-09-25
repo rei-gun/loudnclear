@@ -32,7 +32,7 @@ func FeedCatsWithChannels(cats [NUM_OF_CATS]cat) {
 	//if there are cats remaining, then send them in the final batch
 	if catsFed < NUM_OF_CATS {
 		fmt.Println("Starting final batch no. ", batchNo)
-		feedCats(cats[catsFed:NUM_OF_CATS], batchNo, &catsFedWg, catsFed)
+		feedCatsWithChan(cats[catsFed:NUM_OF_CATS], dirtyDishes, &catsFedWg, &dishWashingWg)
 	}
 	//wait until all cats are fed
 	catsFedWg.Wait()
@@ -61,7 +61,6 @@ func feedCatsWithChan(cats []cat, dirtyDishes chan bool, catsFedWg *sync.WaitGro
 	currBatchWg.Wait()
 	//trigger the washDishes function via this channel
 	dirtyDishes <- true
-	// fmt.Println(len(dirtyDishes))
 	//Add 1 to the dishwashing wait group so the next batch of cats is blocked from eating
 	dishWashingWg.Add(1)
 	return
@@ -77,7 +76,6 @@ func washDishes(dirtyDishes chan bool, quit chan bool, dishWashingWg *sync.WaitG
 			fmt.Println("Finished washing dishes!")
 			//Set dishwashingWg to Done so that the next batch of cats can start eating
 			dishWashingWg.Done()
-			fmt.Println(len(dirtyDishes))
 		case <-quit:
 			return
 		}
