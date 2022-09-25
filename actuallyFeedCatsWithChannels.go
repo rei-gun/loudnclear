@@ -40,24 +40,25 @@ func FeedCatsWithChannels(cats [NUM_OF_CATS]cat) {
 	dishWashingWg.Add(1)
 	dirtyDishes <- true
 	quitDishwashing <- true
-	fmt.Println("Time to feed all cats (seconds): ", time.Since(start))
+	fmt.Println("Actual time to feed all cats (seconds): ", time.Since(start))
 }
 
 func feedCatsWithChan(cats []cat, dirtyDishes chan bool, catsFedWg *sync.WaitGroup, dishWashingWg *sync.WaitGroup) {
-	wg := sync.WaitGroup{}
-	wg.Add(len(cats))
+	currBatchWg := sync.WaitGroup{}
+	currBatchWg.Add(len(cats))
 	//Get cats eating on all dishes
 	for i := 0; i < len(cats); i++ {
 		go func(i int) {
-			defer wg.Done()
+
 			fmt.Println("Cat ", strconv.Itoa(cats[i].id), " has started eating...")
 			time.Sleep(time.Duration(cats[i].eatingTime) * time.Second)
 			fmt.Println("Cat ", cats[i].id, " has finished eating")
+			currBatchWg.Done()
 			catsFedWg.Done()
 		}(i)
 	}
 	//wait until all cats in the current batch have finished eating
-	wg.Wait()
+	currBatchWg.Wait()
 	//trigger the washDishes function via this channel
 	dirtyDishes <- true
 	// fmt.Println(len(dirtyDishes))
