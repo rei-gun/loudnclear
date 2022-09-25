@@ -7,11 +7,16 @@ import (
 	"time"
 )
 
-const NUM_OF_CATS int = 99
+const NUM_OF_CATS int = 10
 const NUM_OF_DISHES int = 3
 const DISHWASHING_TIME int = 2
 const MIN_CAT_EATING_TIME int = 1
-const MAX_CAT_EATING_TIME int = 10
+const MAX_CAT_EATING_TIME int = 3
+
+type cat struct {
+	id         int
+	eatingTime int
+}
 
 func main() {
 	var feedingTimes [NUM_OF_CATS]int
@@ -20,14 +25,10 @@ func main() {
 	for i := 0; i < NUM_OF_CATS; i++ {
 		feedingTimes[i] = rand.Intn(MAX_CAT_EATING_TIME-MIN_CAT_EATING_TIME) + MIN_CAT_EATING_TIME
 	}
-	// fmt.Println("Total Feeding Time In Seconds: " + strconv.Itoa(calcFeedingTime(feedingTimes)))
+	// fmt.Println("Calculated Feeding Time In Seconds: " + strconv.Itoa(calcFeedingTime(feedingTimes)))
 	sortedCats := sortCatsDesc(feedingTimes)
-	FeedCats2(sortedCats)
-}
-
-type cat struct {
-	id         int
-	eatingTime int
+	// FeedCats(sortedCats)
+	FeedCatsWithChannels(sortedCats)
 }
 
 func sortCatsDesc(feedingTimes [NUM_OF_CATS]int) [NUM_OF_CATS]cat {
