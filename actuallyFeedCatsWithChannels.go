@@ -50,7 +50,7 @@ func feedCatsWithChan(cats []cat, dirtyDishes chan bool, catsFedWg *sync.WaitGro
 	for i := 0; i < len(cats); i++ {
 		go func(i int) {
 
-			fmt.Println("Cat ", strconv.Itoa(cats[i].id), " has started eating...")
+			fmt.Println("Cat", strconv.Itoa(cats[i].id), "has started eating for", strconv.Itoa(cats[i].eatingTime), "seconds...")
 			time.Sleep(time.Duration(cats[i].eatingTime) * time.Second)
 			fmt.Println("Cat ", cats[i].id, " has finished eating")
 			currBatchWg.Done()
@@ -68,7 +68,6 @@ func feedCatsWithChan(cats []cat, dirtyDishes chan bool, catsFedWg *sync.WaitGro
 
 func washDishes(dirtyDishes chan bool, quit chan bool, dishWashingWg *sync.WaitGroup) {
 	for {
-		fmt.Println(len(dirtyDishes))
 		select {
 		case <-dirtyDishes:
 			fmt.Println("Washing Dishes...")

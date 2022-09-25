@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-const NUM_OF_CATS int = 10
+const NUM_OF_CATS int = 100
 const NUM_OF_DISHES int = 3
 const DISHWASHING_TIME int = 2
 const MIN_CAT_EATING_TIME int = 1
-const MAX_CAT_EATING_TIME int = 3
+const MAX_CAT_EATING_TIME int = 10
 
 type cat struct {
 	id         int
