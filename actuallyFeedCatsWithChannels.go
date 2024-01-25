@@ -27,6 +27,7 @@ func FeedCatsWithChannels(cats [NUM_OF_CATS]cat) {
 		fmt.Println("Starting batch no. ", batchNo)
 		feedCatsWithChan(cats[catsFed:catsFed+NUM_OF_DISHES], dirtyDishes, &catsFedWg, &dishWashingWg)
 		batchNo++
+		//Wait for the dishes to get washed before starting the next batch of cats
 		dishWashingWg.Wait()
 	}
 	//if there are cats remaining, then send them in the final batch
@@ -49,10 +50,10 @@ func feedCatsWithChan(cats []cat, dirtyDishes chan bool, catsFedWg *sync.WaitGro
 	//Get cats eating on all dishes
 	for i := 0; i < len(cats); i++ {
 		go func(i int) {
-
-			fmt.Println("Cat", strconv.Itoa(cats[i].id), "has started eating for", strconv.Itoa(cats[i].eatingTime), "seconds...")
+			start := time.Now()
+			fmt.Println("Cat", strconv.Itoa(cats[i].id), "has started eating supposedly for", strconv.Itoa(cats[i].eatingTime), "seconds...")
 			time.Sleep(time.Duration(cats[i].eatingTime) * time.Second)
-			fmt.Println("Cat ", cats[i].id, " has finished eating")
+			fmt.Println("Cat ", cats[i].id, " actually finished eating after", time.Since(start))
 			currBatchWg.Done()
 			catsFedWg.Done()
 		}(i)
